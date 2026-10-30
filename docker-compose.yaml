@@ -1,0 +1,38 @@
+services:
+  school-routine-bot:
+    build: .
+    image: school-routine-bot:latest
+    pull_policy: never
+    container_name: school-routine-bot
+    restart: unless-stopped
+    tty: true
+    env_file:
+      - .env
+    volumes:
+      - type: bind
+        source: ./data
+        target: /app/data
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./sent_reminders.json
+        target: /app/sent_reminders.json
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./credentials_for_tables.json
+        target: /app/credentials_for_tables.json
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./school_routine_bot/admin_base_1.json
+        target: /app/school_routine_bot/admin_base_1.json
+        read_only: true
+        bind:
+          create_host_path: false
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

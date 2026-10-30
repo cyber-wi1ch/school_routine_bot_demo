@@ -1,0 +1,20 @@
+[
+  {
+    "admin_id": "100000001",
+    "surname": "ivanova",
+    "name": "anna",
+    "by_father_name": "sergeevna"
+  },
+  {
+    "admin_id": "100000002",
+    "surname": "petrov",
+    "name": "ivan",
+    "by_father_name": "alexeevich"
+  },
+  {
+    "admin_id": "100000003",
+    "surname": "smirnova",
+    "name": "maria",
+    "by_father_name": "nikolaevna"
+  }
+]

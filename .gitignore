@@ -1,0 +1,32 @@
+# Local tools and generated files
+.venv/
+.vscode/
+.idea/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.python-version
+.DS_Store
+*.log
+
+# Local configuration and credentials
+*.env*
+!.env.example
+!tests/test.env
+credentials*.json
+token.json
+
+# Runtime data
+data/
+*.sqlite*
+*.db
+*.db-*
+sent_reminders.json
+test_sent_reminders.json
+user_base*.json
+admin_base_*.json
+school_routine_bot/example_of_schedular.py
