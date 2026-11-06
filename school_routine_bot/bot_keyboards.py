@@ -202,12 +202,22 @@ def build_vk_morning_duty_keyboard() -> Keyboard:
     return keyboard
 
 
+def format_vk_student_button_label(student: StudentFromSheet) -> str:
+    label = f"{student.full_name}, {student.grade}{student.letter}"
+    return label[:39] + "…" if len(label) > 40 else label
+
+
 def build_vk_choose_student_keyboard(students: Sequence[StudentFromSheet]) -> Keyboard:
     keyboard = Keyboard(one_time=False)
 
-    for student in students:
+    for index, student in enumerate(students):
+        label = format_vk_student_button_label(student)
+        payload = None
+        if label != f"{student.full_name}, {student.grade}{student.letter}":
+            payload = {"student_index": index}
+
         keyboard.add(
-            Text(f"{student.full_name}, {student.grade}{student.letter}"),
+            Text(label, payload=payload),
             color=KeyboardButtonColor.PRIMARY,
         ).row()
 

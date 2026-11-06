@@ -1,3 +1,4 @@
+import json
 from datetime import date, datetime
 
 from loguru import logger
@@ -15,6 +16,7 @@ from school_routine_bot.bot_keyboards import (
     build_vk_late_arrival_reason_keyboard,
     build_vk_main_keyboard,
     build_vk_morning_duty_keyboard,
+    format_vk_student_button_label,
 )
 from school_routine_bot.duty_utils_for_bot_clients import (
     filter_personal_duty_data_for_now,
@@ -415,8 +417,12 @@ def setup_handlers(bot):
             await message.answer(
                 "Пожалуйста, проводите одно утреннее дежурство только в одном мессенджере. "
                 "Иначе возникнут дубли записей в таблице.\n\n"
-                "Если VK-бот перестал отвечать, перейдите в TG-версию и кликните 'Начать дежурство'. "
-                "Продолжайте работу там до конца дежурства."
+                "Обязательно завершайте дежурство в тот же день, "
+                "чтобы запись о самом дежурстве тоже сохранилась в таблицу в лист 'Утренние дежурства'.\n\n"
+                "(Если VK-бот перестал отвечать и Вы также добавлены в дежурные "
+                "по опозданиям в Telegram, "
+                "перейдите в TG-версию и кликните 'Начать дежурство'. "
+                "Продолжайте работу там до конца дежурства.) "
             )
 
             await message.answer(
@@ -584,15 +590,29 @@ def setup_handlers(bot):
             )
             return
 
-        selected_student = next(
-            (
-                student
-                for student in students
-                if message.text
-                == f"{student.full_name}, {student.grade}{student.letter}"
-            ),
-            None,
-        )
+        try:
+            payload = json.loads(message.payload or "{}")
+        except (json.JSONDecodeError, TypeError):
+            payload = None
+
+        selected_student = None
+        if isinstance(payload, dict):
+            if "student_index" in payload:
+                student_index = payload["student_index"]
+                if type(student_index) is int and 0 <= student_index < len(students):
+                    student = students[student_index]
+                    if message.text == format_vk_student_button_label(student):
+                        selected_student = student
+            else:
+                selected_student = next(
+                    (
+                        student
+                        for student in students
+                        if message.text
+                        == f"{student.full_name}, {student.grade}{student.letter}"
+                    ),
+                    None,
+                )
 
         if selected_student is None:
             await message.answer(
