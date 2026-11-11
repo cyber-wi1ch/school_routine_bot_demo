@@ -1,5 +1,7 @@
 # Доступ к Google Sheets
 
+Русский | [English](en/how_to_get_API_access_to_google_sheets.md)
+
 [README](../README.md) · [Формат таблиц](google_sheets_format.md)
 
 Бот использует JSON-ключ сервисного аккаунта Google. OAuth-вход и запуск `quickstart.py` не требуются.

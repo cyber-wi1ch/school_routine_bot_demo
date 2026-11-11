@@ -14,22 +14,22 @@ class User(_Base_for_inheritance):
     name: Mapped[str] = mapped_column(String(30))
     by_father_name: Mapped[str] = mapped_column(String(30))
     chat_id: Mapped[int] = mapped_column(
-        BigInteger,  # Тип данных
-        primary_key=False,  # Не первичный ключ
-        unique=True,  # Уникальное значение
+        BigInteger,  # Data type
+        primary_key=False,  # Not a primary key
+        unique=True,  # Unique value
         nullable=True,  # MAY BE NULL
-        index=True,  # Создать индекс
-        comment="Telegram ID",  # Комментарий к полю
-        name="telegram_id",  # Имя колонки в БД (если отличается от атрибута)
+        index=True,  # Create an index
+        comment="Telegram ID",  # Column comment
+        name="telegram_id",  # Database column name (if different from the attribute)
     )
     vk_id: Mapped[int] = mapped_column(
-        BigInteger,  # Тип данных
-        primary_key=False,  # Не первичный ключ
-        unique=True,  # Уникальное значение
+        BigInteger,  # Data type
+        primary_key=False,  # Not a primary key
+        unique=True,  # Unique value
         nullable=True,  # MAY BE NULL
-        index=True,  # Создать индекс
-        comment="VK ID",  # Комментарий к полю
-        name="vk_id",  # Имя колонки в БД (если отличается от атрибута)
+        index=True,  # Create an index
+        comment="VK ID",  # Column comment
+        name="vk_id",  # Database column name (if different from the attribute)
     )
 
 

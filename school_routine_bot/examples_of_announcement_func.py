@@ -1,11 +1,11 @@
-# async def announce_about_changes(): абсолюнто дргуая работа - надо тянуть юезров из бд теперь.
+# async def announce_about_changes(): Needs reworking: load users from the database now.
 #     for user, name in matcher.users.items():
 #         try:
 #             await bot.send_message(
 #                 user,
-#                 "👋🏻Добрый вечер! У бота изменилась работа кнопки 'Ближайшие дежурства' "
-#                 "Чтобы у Вас обновилась версия этой кнопки, "
-#                 "пожалуйста, кликните на неё.",
+#                 "👋🏻Good evening! The bot's 'Upcoming duties' button has changed. "
+#                 "To refresh the button, "
+#                 "please click it.",
 #             )
 #             logger.info(f"{name['surname']} have accepted message about new buttons")
 #         except ApiTelegramException:
@@ -18,7 +18,7 @@
 
 # async def announce_about_changes():
 #     async with get_session() as session:
-#         # Для асинхронного SQLAlchemy используйте select и await session.execute
+#         # For async SQLAlchemy, use select and await session.execute
 #         from sqlalchemy import select
 #         stmt = select(User).where(User.chat_id.is_not(None))
 #         result = await session.execute(stmt)
@@ -28,8 +28,8 @@
 #             try:
 #                 await bot.send_message(
 #                     user.chat_id,
-#                     "👋🏻 Спешу сообщить,что теперь наш бот есть ВКонтакте. Прилагаю ссылку и порядок действий, "
-#                     "чтобы стать пользователем ВК версии School Routine Bot ( ГДЕ-ТО ТУТ БУДЕТ ССЫЛКА И ПОРЯДОК!!)"
+#                     "👋🏻 Our bot is now available on VK. Here are the link and instructions "
+#                     "for joining the VK version of School Routine Bot (ADD THE LINK AND STEPS HERE)"
 #                 )
 #                 logger.info(f"User {user.tg_id} notified")
 #             except ApiTelegramException:

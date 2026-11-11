@@ -3,7 +3,7 @@ import traceback
 
 
 def redact_secrets(text: str, secrets: tuple[str, ...]) -> str:
-    """Заменяет переданные секреты заглушкой."""
+    """Replace the supplied secrets with a placeholder."""
     for secret in sorted(
         {value for value in secrets if value},
         key=lambda value: len(value),

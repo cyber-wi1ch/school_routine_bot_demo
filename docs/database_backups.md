@@ -1,5 +1,7 @@
 # Резервные копии базы
 
+Русский | [English](en/database_backups.md)
+
 [README](../README.md) · [Обслуживание](deployment.md)
 
 ## Автоматическая копия

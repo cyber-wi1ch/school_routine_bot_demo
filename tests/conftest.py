@@ -38,7 +38,7 @@ def caught_logs() -> Iterator[list[str]]:
 
 @pytest.fixture
 def engine():
-    """Создает in-memory SQLite базу данных"""
+    """Create an in-memory SQLite database."""
     engine = create_engine(
         "sqlite:///:memory:",
         connect_args={"check_same_thread": False},
@@ -50,7 +50,7 @@ def engine():
 
 @pytest.fixture
 def session(engine, mocker):
-    """Создает сессию для тестов"""
+    """Create a database session for tests."""
     Session = sessionmaker(bind=engine)
     mocker.patch.object(db_create, "_session_maker", Session)
     session = Session()
@@ -61,11 +61,11 @@ def session(engine, mocker):
 
 @pytest.fixture(autouse=True)
 def clean_db(engine):
-    """Автоматически очищает БД перед каждым тестом"""
+    """Reset the database before each test."""
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     yield
-    # после теста тоже можно очистить, если нужно
+    # Clean up after the test as well
     Base.metadata.drop_all(engine)
 
 

@@ -173,7 +173,7 @@ def test_redaction_failure_returns_safe_message(monkeypatch, target):
 def test_loguru_does_not_leak_token_on_file_write_failure(
     tmp_path, use_keyword, disk_full
 ):
-    """Очищаться должен и аварийный вывод, а не только обычное сообщение."""
+    """Redact fallback error output as well as the regular message."""
     project_root = Path(__file__).resolve().parents[1]
     script = """
 import errno

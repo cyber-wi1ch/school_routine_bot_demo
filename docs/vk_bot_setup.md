@@ -1,5 +1,7 @@
 # Создание бота ВКонтакте
 
+Русский | [English](en/vk_bot_setup.md)
+
 [README](../README.md) · [Настройка Telegram](telegram_bot_setup.md)
 
 Бот работает от имени сообщества и получает сообщения через Long Poll API.

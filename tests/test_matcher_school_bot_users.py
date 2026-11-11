@@ -390,13 +390,13 @@ def test_write_full_name_into_user_base__case_no_user(
     assert new_user.by_father_name == found_user.by_father_name
     if messenger_tag == User.vk_id:
         assert new_user.vk_id == found_user.vk_id
-        # chat_id остался None
+        # chat_id is still None
         assert found_user.chat_id is expected_value
     elif messenger_tag == User.chat_id:
         assert new_user.chat_id == found_user.chat_id
-        # vk_id остался None
+        # vk_id is still None
         assert found_user.vk_id is expected_value
-    # id присвоен
+    # id has been assigned
     assert found_user.id is not expected_value
 
 
@@ -450,19 +450,19 @@ def test_write_full_name_into_user_base__case_no_vk_id(
     result = matcher.write_full_name_into_user_base(gotten_id, full_person_name)
     assert result is True
 
-    # Теперь ищем пользователя по chat_id
+    # Look up the user by chat_id
     with get_session() as session_2:
         found_user = session_2.query(User).filter(messenger_tag == gotten_id).first()
         assert found_user
 
-    # Проверяем, что у найденного пользователя правильные данные
+    # Verify the retrieved user's data
     assert found_user.surname == "чичикова"
     assert found_user.name == "марина"
     assert found_user.by_father_name == "дмитриевна"
-    assert found_user.vk_id == 1074  # добавился новый vk_id
-    assert found_user.chat_id == 1789  # остался старый chat_id
+    assert found_user.vk_id == 1074  # A new vk_id has been added
+    assert found_user.chat_id == 1789  # The existing chat_id is preserved
 
-    # Проверяем, что пользователь с такой фамилией остался один
+    # Verify that exactly one user with this surname remains
     count = session.query(User).filter(User.surname == "чичикова").count()
     assert count == 1
 
@@ -550,19 +550,19 @@ def test_write_full_name_into_user_base__case_both_ids(
     result = matcher.write_full_name_into_user_base(gotten_id, full_person_name)
     assert result is True
 
-    # Теперь ищем пользователя по chat_id
+    # Look up the user by chat_id
     with get_session() as session_2:
         found_user = session_2.query(User).filter(messenger_tag == gotten_id).first()
         assert found_user
 
-    # Проверяем, что у найденного пользователя правильные данные
+    # Verify the retrieved user's data
     assert found_user.surname == "чичикова"
-    assert found_user.name == "мария"  # изменилось имя (было - марина)
+    assert found_user.name == "мария"  # The given name has changed (previously Marina)
     assert found_user.by_father_name == "дмитриевна"
-    assert found_user.vk_id == 1074  # должен сохраниться старый vk_id
-    assert found_user.chat_id == 1789  # должен сохраниться старый chat_id
+    assert found_user.vk_id == 1074  # The existing vk_id must be preserved
+    assert found_user.chat_id == 1789  # The existing chat_id must be preserved
 
-    # Проверяем, что пользователь с такой фамилией остался один
+    # Verify that exactly one user with this surname remains
     count = session.query(User).filter(User.surname == "чичикова").count()
     assert count == 1
 
@@ -617,19 +617,19 @@ def test_write_full_name_into_user_base__case_no_tg_id(
     result = matcher.write_full_name_into_user_base(gotten_id, full_person_name)
     assert result is True
 
-    # Теперь ищем пользователя по chat_id
+    # Look up the user by chat_id
     with get_session() as session_2:
         found_user = session_2.query(User).filter(messenger_tag == gotten_id).first()
         assert found_user
 
-    # Проверяем, что у найденного пользователя правильные данные
+    # Verify the retrieved user's data
     assert found_user.surname == "чичикова"
     assert found_user.name == "марина"
     assert found_user.by_father_name == "дмитриевна"
-    assert found_user.vk_id == 1074  # должен сохраниться старый vk_id
-    assert found_user.chat_id == 1789  # добавился новый chat_id
+    assert found_user.vk_id == 1074  # The existing vk_id must be preserved
+    assert found_user.chat_id == 1789  # A new chat_id has been added
 
-    # Проверяем, что пользователь с такой фамилией остался один
+    # Verify that exactly one user with this surname remains
     count = session.query(User).filter(User.surname == "чичикова").count()
     assert count == 1
 

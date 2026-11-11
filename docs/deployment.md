@@ -1,5 +1,7 @@
 # Запуск и обслуживание через Docker Compose
 
+Русский | [English](en/deployment.md)
+
 [README](../README.md) · [Резервные копии](database_backups.md) · [Смена администратора](admin_management.md)
 
 ## Docker Compose

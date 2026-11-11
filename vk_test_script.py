@@ -15,7 +15,7 @@ resp = requests.get(
 if "error" in resp:
     print("❌ Ошибка:", resp["error"]["error_msg"])
 else:
-    # resp["response"] — это список групп
+    # resp["response"] is a list of communities
     groups = resp["response"]
     if groups:
         print("✅ Токен работает, группа:", groups[0]["name"])

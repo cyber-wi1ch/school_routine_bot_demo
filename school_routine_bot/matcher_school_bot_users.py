@@ -172,7 +172,7 @@ class MatcherSchoolBotUsers:
                                 f"User {user_id} {full_name_message} joins tg bot version"
                             )
                             old_user.chat_id = user_id
-                        # присваиваем новое значение
+                        # Assign the new value
                         session.commit()
                     else:
                         logger.warning(

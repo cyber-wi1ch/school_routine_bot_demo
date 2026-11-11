@@ -52,28 +52,28 @@ def format_actual_duty_button_text(personal_duty_message: str) -> str:
 # IF ONE MORE SHEET WILL BE NEEDED
 # def format_actual_duty_button_text(personal_duty_message: str) -> str:
 #     if personal_duty_message.startswith(
-#         "<i>(Из листа таблицы 'Запись на дежурства')</i>\n "
-#         "<i>(Из листа таблицы 'Дежурства на ВП')</i>\n"
+#         "<i>(From worksheet 'Duty sign-up')</i>\n "
+#         "<i>(From worksheet 'VP duty')</i>\n"
 #     ):
 #         personal_duty_message = personal_duty_message.replace(
-#             "<i>(Из листа таблицы 'Запись на дежурства')</i>\n", ""
+#             "<i>(From worksheet 'Duty sign-up')</i>\n", ""
 #         )
 #     elif personal_duty_message.startswith(
-#         "<i>(Из листа таблицы 'Дежурства на ВП')</i>\n "
-#         "<i>(Из листа таблицы 'Запись на дежурства')</i>\n"
+#         "<i>(From worksheet 'VP duty')</i>\n "
+#         "<i>(From worksheet 'Duty sign-up')</i>\n"
 #     ):
 #         personal_duty_message = personal_duty_message.replace(
-#             "<i>(Из листа таблицы 'Дежурства на ВП')</i>\n", ""
+#             "<i>(From worksheet 'VP duty')</i>\n", ""
 #         )
 #
-#     personal_duty_message = f"⏱️Вы дежурите:\n\n {personal_duty_message}"
+#     personal_duty_message = f"⏱️Your duties:\n\n {personal_duty_message}"
 #
-#     if personal_duty_message.endswith("ВП')</i>\n "):
+#     if personal_duty_message.endswith("VP duty')</i>\n "):
 #         personal_duty_message = personal_duty_message.replace(
-#             "<i>(Из листа таблицы 'Дежурства на ВП')</i>\n", ""
+#             "<i>(From worksheet 'VP duty')</i>\n", ""
 #         )
-#     elif personal_duty_message.endswith("дежурства')</i>\n "):
+#     elif personal_duty_message.endswith("sign-up')</i>\n "):
 #         personal_duty_message = personal_duty_message.replace(
-#             "<i>(Из листа таблицы 'Запись на дежурства')</i>\n", ""
+#             "<i>(From worksheet 'Duty sign-up')</i>\n", ""
 #         )
 #     return personal_duty_message

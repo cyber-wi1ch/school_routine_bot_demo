@@ -6,7 +6,7 @@ settings = get_settings()
 engine = create_engine(settings.database)
 
 with engine.connect() as conn:
-    # Проверяем, существует ли уже колонка
+    # Check whether the column already exists
     result = conn.execute(text("PRAGMA table_info(users)"))
     columns = [row[1] for row in result]
     if "vk_id" not in columns:
