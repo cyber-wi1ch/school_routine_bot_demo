@@ -13,7 +13,7 @@ The bot acts on behalf of a community and receives messages through the Long Pol
 3. Open **API usage > Access tokens > Create token**. Allow access to community messages, confirm token creation, and copy the token.
 4. Under **API usage > Long Poll API**, enable Long Poll. Under **Event types**, select **Incoming message (`message_new`)** and save the settings.
 
-This project requires a community token; this type of bot is described in the [VKBottle documentation](https://vkbottle.readthedocs.io/ru/latest/tutorial/first-bot/). VK menu labels and locations may differ.
+This project requires a community token. Long Poll requirements are described in the [VKBottle documentation](https://vkbottle.readthedocs.io/ru/latest/tutorial/first-bot/). VK menu labels and locations may differ.
 
 ## Connect It to the Project
 
@@ -24,7 +24,7 @@ vk_bot_token="COMMUNITY_TOKEN"
 messenger_tag="vk"
 ```
 
-Also fill in `bot_token` with a real [Telegram token](telegram_bot_setup.md): the current code creates a Telegram client even when running the VK bot.
+In the current version, the `bot_token` field in `.env` is required to start the VK bot. Keep the existing Telegram token value even if the Telegram bot is no longer used. Stopping the TG server or revoking the token does not prevent VK startup: only the token format is checked at startup. A valid token is required to send Telegram notifications. Removing this dependency completely requires code changes.
 
 For initial setup, follow the [first-start instructions](../../README.en.md#first-start-with-docker-compose). If the bot is already running, [apply the `.env` changes](deployment.md#docker-compose). Then send `Начать` (Start) to the community; the bot should ask for your full name.
 

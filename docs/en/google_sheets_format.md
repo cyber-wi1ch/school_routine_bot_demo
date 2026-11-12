@@ -4,7 +4,7 @@
 
 [README](../../README.en.md)
 
-Two URLs are required in `.env`: `table_url` points to a spreadsheet with the "Запись на дежурства" worksheet; `morning_duty_table_url` points to a spreadsheet with "Ученики", "Опоздавшие", and "Утренние дежурства". Both URLs may point to the same spreadsheet. Worksheet names and column order must match the specification below.
+The service works with two Google spreadsheets and requires two URLs: `table_url` for the duty schedule covering floors and locations, and `morning_duty_table_url` for morning entrance duties and late arrivals. The spreadsheets must contain all worksheets referenced by the bot's code. Worksheet names and column order must match the specification below.
 
 Keep the Russian worksheet names and sample headers unchanged: they describe the bot's existing data format, not a translated interface.
 
@@ -27,7 +27,7 @@ Headers occupy A1:G1; data starts in row 2. Paste this tab-separated block into 
 
 Use intervals within a single day. Format column A as `DD.MM.YYYY` or plain text. Do not insert service rows between duties. The bot reads up to three upcoming blocks, starting with today's or the next available date.
 
-Column B does not grant administrator permissions or configure notification recipients.
+Column B does not grant administrator permissions or configure notification recipients. Currently, only the "Запись на дежурства" worksheet is read from the duty schedule.
 
 ## Students: "Ученики"
 

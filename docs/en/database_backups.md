@@ -4,11 +4,11 @@
 
 [README](../../README.en.md) | [Maintenance](deployment.md)
 
-## Automatic Backup
+## Preparing a User Database Snapshot for Backup
 
 While the bot is running, the database is copied daily at **03:00 for TG and 03:05 for VK**, using the container's Moscow time zone. The default server-side file is `data/bot_db.sqlite_backup`. It is overwritten each time: this is one local copy, not a backup history. Check the Compose logs for success or errors.
 
-Once a month, save separate TG and VK copies **outside the servers**. You will need them if a server-side copy is unavailable or corrupted. Changes made after the backup will be lost during recovery; export copies more often if that is unacceptable.
+Make sure to save separate TG and VK copies **outside the servers** once a month. You will need them if a server-side copy is unavailable or corrupted. Changes made after the backup will be lost during recovery; export copies more often if that is unacceptable.
 
 ## Manual Download
 
@@ -16,22 +16,22 @@ Substitute the SSH addresses for your separate TG and VK instances:
 
 | Bot | Connection |
 | --- | --- |
-| TG | `USER@TG_HOST` |
-| VK | `USER@VK_HOST` |
+| TG | `ssh USER@TG_HOST` |
+| VK | `ssh USER@VK_HOST` |
 
-1. Check the Compose logs to confirm that the nightly backup succeeded. Do not download the file while it is being overwritten.
-2. On your own computer, **outside the SSH session**, run the following commands, replacing `USER`, the hostnames, and the project path:
+Check the Compose logs to confirm that the nightly backup succeeded. Do not download the file while it is being overwritten.
 
-   ```bash
-   scp USER@TG_HOST:/path/to/project/data/bot_db.sqlite_backup "$HOME/Desktop/bot_db_tg_$(date +%F).sqlite_backup"
-   scp USER@VK_HOST:/path/to/project/data/bot_db.sqlite_backup "$HOME/Desktop/bot_db_vk_$(date +%F).sqlite_backup"
-   ```
+1. Once a month, download the database backup from each server. Run the command **on your own computer, outside the SSH session**. Replace `USER@HOST` and `/path/to/project` with your SSH connection details and project directory. This command saves the copy to your Desktop; enter the corresponding server's password if prompted:
+    ```bash
+    scp USER@HOST:/path/to/project/data/bot_db.sqlite_backup ~/Desktop/
+    ```
+2. After a successful download, the database file will appear on your Desktop. Rename it before downloading the copy from the second server: include the bot (TG or VK) and the date so that you do not overwrite the first copy.
 
-3. Confirm that both commands succeeded and that both files are on your Desktop. Names include the bot and download date, for example `bot_db_tg_2026-10-29.sqlite_backup` and `bot_db_vk_2026-10-29.sqlite_backup`. The database itself reflects the time of the nightly backup. Downloading again on the same day overwrites the file with the same name.
+Do not skip the monthly backup: it is the fallback for recovering a recent state of the user database if the server-side backup fails. This procedure accepts the risk of losing changes made since the last saved backup.
 
 ## Recovery
 
-These steps restore `data/bot_db.sqlite`, including users and roles. Choose one of the two options below. Replace `USER@HOST` with your SSH connection details and `/path/to/project` with the project directory. If a command fails, do not proceed to the next step.
+These steps restore `data/bot_db.sqlite`, including users and roles. Choose one of the two options below. Replace `USER@HOST` with your SSH connection details and `/path/to/project` with the project directory; enter the password if SSH or SCP prompts for it. If a command fails, do not proceed to the next step.
 
 The server-side backup is named `bot_db.sqlite_backup`; the code defines this name. The temporary restore file is `bot_db_restore.sqlite`, and the saved damaged database is `bot_db_broken.sqlite`. Before replacing the database, the commands use Python from the bot image to check SQLite integrity and the presence of user and role tables.
 

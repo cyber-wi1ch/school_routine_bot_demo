@@ -6,7 +6,7 @@
 
 ## Docker Compose
 
-Run all commands from the project directory containing `docker-compose.yaml`. There is one service, `school-routine-bot`; `.env` selects the messenger. Use separate instances for TG and VK and run the commands for each instance separately.
+Run all commands on the relevant server from the project directory containing `docker-compose.yaml`. There is one service, `school-routine-bot`; `.env` selects the messenger. Use separate instances for TG and VK and run the commands for each server separately.
 
 | Action | Command |
 | --- | --- |
@@ -27,35 +27,43 @@ Pressing `Ctrl+C` while viewing logs stops the log viewer, not the bot. Do not r
 
 ## Updating
 
-Before updating, save a [backup](database_backups.md). If the database schema changes, agree on the migration procedure with a developer: starting the bot does not automatically update existing columns.
+Before updating, save a [backup](database_backups.md). If the database schema changes, agree on the migration procedure with a developer: starting the bot does not automatically update existing columns. If a command fails, do not proceed to the next step.
 
-1. Connect to your server over SSH, replacing `USER@HOST` and the project path with your own:
+1. Connect to the relevant server over SSH. Replace `USER@HOST` with your SSH connection details; enter the password if prompted:
+```bash
+ssh USER@HOST
+```
 
-   ```bash
-   ssh USER@HOST
-   cd /path/to/project
-   git status
-   ```
+2. Open the project directory, replacing `/path/to/project` with your path:
+```bash
+cd /path/to/project
+```
+3. Update the agreed branch:
+```bash
+git pull
+```
+4. Rebuild the project's container image:
+```bash
+docker compose build school-routine-bot
+```
+5. Once the build completes, usually indicated by `Built` with a check mark, stop the previous container:
 
-   Make sure the agreed branch is selected and there are no uncommitted changes. If there are changes or errors, contact a developer.
+```bash
+docker compose stop school-routine-bot
+```
+The bot will remain unavailable until you complete the next step.
 
-2. Fetch the changes and build the new image. The old container keeps running:
+6. Start the new container:
+```bash
+docker compose up -d school-routine-bot
+```
+Compose handles replacing the old container with the new one. The bot is unavailable during this transition. The expected status is `Up`.
 
-   ```bash
-   git pull --ff-only && docker compose build school-routine-bot
-   ```
-
-   Stop if either command fails; do not proceed to the next step.
-
-3. After a successful build, replace the container and check startup:
-
-   ```bash
-   docker compose up -d --no-build school-routine-bot
-   docker compose ps -a
-   docker compose logs --tail 100 school-routine-bot
-   ```
-
-   Compose stops the old container and starts the new one; the bot will be unavailable during this transition. The expected status is `Up`. Check the logs for errors and test a bot response, such as "Ваши данные" (Your details).
+7. No further console output can be normal. To follow the logs in real time, run:
+```bash
+docker compose logs -f school-routine-bot
+```
+Check the logs for errors and test a bot response, such as "Ваши данные" (Your details).
 
 The database and JSON files are mounted from the host, so recreating the container preserves them. A rollback requires compatible code and database versions.
 
@@ -78,7 +86,7 @@ After connecting over SSH, run this from any directory:
 df -h /
 ```
 
-`Avail` is free space; `Use%` is the proportion of the disk in use. As a guideline, if **80% or more is used, or less than 3 GB is free**, assess whether cleanup is needed before the next build.
+`Avail` is free space; `Use%` is the proportion of the disk in use. As a guideline, if **80% or more is used, or less than 3 GB is free**, send the output to a developer for inspection and cleanup.
 
 A developer can inspect Docker and system journal disk usage with:
 

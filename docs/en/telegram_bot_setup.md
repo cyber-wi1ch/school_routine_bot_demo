@@ -20,7 +20,7 @@ bot_token="TOKEN_FROM_BOTFATHER"
 messenger_tag="tg"
 ```
 
-The settings also require `vk_bot_token`. To support all notifications, use a valid test VK community token. If VK is not used, a placeholder in this field lets you test only some scenarios. See [how to obtain a VK token](vk_bot_setup.md).
+A valid `vk_bot_token` is needed to send VK notifications when the morning duty role is assigned or revoked. If users in the current database have only Telegram IDs, these notifications are sent only to Telegram. The settings still require the `vk_bot_token` field: if VK is not used, set `vk_bot_token="unused"`. To send messages to VK, replace the placeholder with a [real token](vk_bot_setup.md).
 
 For initial setup, follow the [first-start instructions](../../README.en.md#first-start-with-docker-compose). If the bot is already running, [apply the `.env` changes](deployment.md#docker-compose). Then open your bot and send `/start`; it should ask for your full name.
 
