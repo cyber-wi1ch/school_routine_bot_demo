@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 
@@ -101,3 +103,87 @@ async def test_registration_save_error(mocker, monkeypatch):
     assert "Не удалось сохранить" in message.answer.await_args.args[0]
     menu.assert_not_awaited()
     assert 111 in bot.state_dispenser.peer_ids
+
+
+@pytest.fixture
+def vk_duty(mocker, monkeypatch, fake_bot_settings):
+    from school_routine_bot.vk_bot import vk_client as client
+
+    handlers = {}
+
+    def register(**kwargs):
+        def remember(handler):
+            handlers[handler.__name__] = handler
+            return handler
+
+        return remember
+
+    bot = FakeBot()
+    bot.on = mocker.Mock()
+    bot.on.message.side_effect = register
+    bot.state_dispenser.set = mocker.AsyncMock()
+    monkeypatch.setattr(client, "student_options_by_peer", {})
+    monkeypatch.setattr(client, "late_record_draft_by_peer", {})
+    client.setup_handlers(bot)
+    return client, bot, handlers
+
+
+def make_vk_message(mocker, text, payload=None):
+    return mocker.Mock(
+        text=text, payload=payload, peer_id=111, from_id=111, answer=mocker.AsyncMock()
+    )
+
+
+LONG_STUDENT_NAME = "Тестов Александр Константин Александрович Младший"
+
+
+@pytest.mark.parametrize(
+    ("full_name", "expected_label"),
+    [
+        # The ", 5А" suffix adds four characters to the name.
+        pytest.param("А" * 34, "А" * 34 + ", 5А", id="38-characters-unchanged"),
+        pytest.param("А" * 36, "А" * 36 + ", 5А", id="40-characters-unchanged"),
+        pytest.param("А" * 37, "А" * 37 + ", …", id="41-characters-truncated"),
+        pytest.param(
+            LONG_STUDENT_NAME,
+            "Тестов Александр Константин Александров…",
+            id="long-name-truncated",
+        ),
+    ],
+)
+async def test_vk_student_button_40_symbols_limit_boundaries(
+    full_name, expected_label, vk_duty, mocker
+):
+    from school_routine_bot.pydantic_schemes import StudentFromSheet
+    from school_routine_bot.vk_bot.vk_states import States
+
+    client, bot, handlers = vk_duty
+    students = [
+        StudentFromSheet(full_name=name, grade="5", letter="А")
+        for name in ["Тестов Другой Ученик", full_name]
+    ]
+    client.student_options_by_peer[111] = students
+    keyboard = client.build_vk_choose_student_keyboard(students)
+    button = json.loads(keyboard.get_json())["buttons"][1][0]["action"]
+
+    assert button["label"] == expected_label
+
+    # VK returns the button payload as a JSON string.
+    payload = button.get("payload")
+    message = make_vk_message(
+        mocker,
+        text=button["label"],
+        payload=json.dumps(payload) if payload is not None else None,
+    )
+    await handlers["handle_morning_duty_student_choice"](message)
+
+    message.answer.assert_awaited_once()
+    assert full_name in message.answer.await_args.args[0]
+    bot.state_dispenser.set.assert_awaited_once_with(
+        111, States.MORNING_DUTY_WAIT_REASON
+    )
+    assert client.late_record_draft_by_peer[111] == {
+        "late_student_full_name": full_name,
+        "grade": "5",
+        "letter": "А",
+    }
