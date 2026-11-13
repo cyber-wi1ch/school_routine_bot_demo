@@ -9,7 +9,7 @@ def call_inspector(engine, session):
     if "users" in tables:
         print("4. ✓ Таблица 'users' успешно создана!")
 
-        # Показываем структуру
+        # Display the schema
         columns = inspector.get_columns("users")
         print("5. Колонки:")
         for col in columns:
@@ -18,7 +18,7 @@ def call_inspector(engine, session):
         result = session.execute(text("SELECT * FROM users"))
 
         for row in result:
-            # Вариант 1: как кортеж
+            # Option 1: as a tuple
             print(f"Кортеж: {row}")
 
     else:

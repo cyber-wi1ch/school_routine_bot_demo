@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     messenger_tag: Literal["vk", "tg"] = "tg"
 
     ###
-    # здесь мы указываем путь к файлу бд, с которым будем работать.
+    # Path to the database file used by the application.
     database: str = (
         f"sqlite:///{(Path(__file__).parent / '../data/bot_db.sqlite').absolute()}"
     )

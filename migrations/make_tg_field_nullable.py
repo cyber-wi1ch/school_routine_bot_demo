@@ -5,7 +5,7 @@ def make_telegram_id_nullable(engine):
     with engine.connect() as conn:
         conn.execute(text("PRAGMA foreign_keys=OFF"))
 
-        # Пересоздаём таблицу с nullable telegram_id
+        # Recreate the table with a nullable telegram_id
         conn.execute(
             text(
                 """
@@ -23,10 +23,10 @@ def make_telegram_id_nullable(engine):
             )
         )
 
-        # Копируем данные
+        # Copy the data
         conn.execute(text("INSERT INTO users_new SELECT * FROM users"))
 
-        # Заменяем старую таблицу
+        # Replace the old table
         conn.execute(text("DROP TABLE users"))
         conn.execute(text("ALTER TABLE users_new RENAME TO users"))
         conn.execute(text("PRAGMA foreign_keys=ON"))

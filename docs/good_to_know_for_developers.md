@@ -1,5 +1,7 @@
 # Для разработчиков
 
+Русский | [English](en/good_to_know_for_developers.md)
+
 [README](../README.md) · [Docker Compose](deployment.md)
 
 ## Локальная разработка

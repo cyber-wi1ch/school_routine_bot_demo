@@ -1,5 +1,7 @@
 # Как пользоваться ботом
 
+Русский | [English](en/user_guide.md)
+
 [README](../README.md) · [Формат таблиц](google_sheets_format.md)
 
 Для работы нужен Telegram или ВК. Ссылку на бота получите у ответственного в школе.

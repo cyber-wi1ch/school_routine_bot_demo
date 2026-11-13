@@ -786,8 +786,8 @@ async def handle_any_message(message):
 
 async def announce_about_changes():
     """
-    Рассылает сообщение всем пользователям из БД (у кого есть tg_id)
-    о появлении бота во ВКонтакте и обновлении кнопки.
+    Notify all database users with a Telegram ID about
+    the VK bot launch and the updated button.
     """
     with get_session() as session:
         # Get all users with a non-empty tg_id.

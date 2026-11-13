@@ -1,5 +1,7 @@
 # Создание бота Telegram
 
+Русский | [English](en/telegram_bot_setup.md)
+
 [README](../README.md) · [Настройка ВК](vk_bot_setup.md)
 
 ## Получить токен
